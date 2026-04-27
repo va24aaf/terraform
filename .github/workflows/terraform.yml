@@ -14,9 +14,20 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v3
 
-      - run: terraform init
-      - run: terraform validate
-      - run: terraform plan
+      # ✅ ADD THIS (very important)
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Validate
+        run: terraform validate
+
+      - name: Plan
+        run: terraform plan
 
       - name: Apply
         if: github.ref == 'refs/heads/main'
